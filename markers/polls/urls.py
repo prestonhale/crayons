@@ -18,5 +18,7 @@ from django.contrib import admin
 from polls import views
 
 urlpatterns = [
-	url(r'/(?P(0-9)+)/', views.poll_responses, name='all_responses'),
+	url(r'^$', views.polls, name='polls'),
+	url(r'^([0-9]+)/$', views.responses, name='responses'),
+	url(r'^([0-9]+)/add/$', views.add_response, name='add_response'),
 ]
