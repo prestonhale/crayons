@@ -136,3 +136,9 @@ class Responses(TestCase):
 		self.assertEqual(response.user.id, bob_user.id)
 
 
+class RegisteringNewVoter(TestCase):
+
+	def AddUser(self):
+		pass
+
+
