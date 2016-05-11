@@ -50,7 +50,7 @@ def add_response(request, poll_id):
         )
 
     else:
-        return JsonResponse({}, status=400,
+        return response_handler({}, status=400,
             developer_message="poll_choice_id is a required post param",
             user_message="Select a choice!",
         )

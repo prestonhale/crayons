@@ -1,0 +1,5 @@
+django==1.9.6
+factory-boy==2.6.0
+fake-factory==0.5.3
+pytest==2.8.2
+
