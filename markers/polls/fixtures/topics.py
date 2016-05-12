@@ -13,7 +13,6 @@ def topic_factory():
     class TopicFactory(factory.django.DjangoModelFactory):
         class Meta:
                 model = Topic
-                django_get_or_create = ('name',)
 
         name = faker.sentence(nb_words=5)
 
@@ -26,8 +25,7 @@ def sample_topic():
     sample usage:
     > topic1 = sample_topic()
     > topic2 = sample_topic()
-    > topic3 = sample_topic()
-    > Topic.objects.all().count() # returns 3
+    > Topic.objects.all().count() # returns 2
     '''
 
     name = factory.LazyAttribute(lambda x: faker.sentence(nb_words=5))
