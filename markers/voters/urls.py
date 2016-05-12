@@ -18,6 +18,6 @@ from django.contrib import admin
 from voters import views
 
 urlpatterns = [
-	url(r'^create/$', views.create_voter),
+	url(r'^$', views.VoterList.as_view()),
 	url(r'^validate-phone/$', views.validate_phone)
 ]

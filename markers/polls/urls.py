@@ -19,8 +19,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from polls import views
 
 urlpatterns = [
-	url(r'^polls/$', views.poll_list),
-    url(r'^polls/(?P<pk>[0-9]+)/$', views.poll_detail),
+	url(r'^$', views.PollList.as_view()),
+    url(r'^(?P<pk>[0-9]+)/$', views.PollDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
