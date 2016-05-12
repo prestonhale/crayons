@@ -1,4 +1,4 @@
-#!/Users/slethik/Documents/crayons/virtualenv/bin/python
+#!/Users/ghost/crayons/virtualenv/bin/python
 
 import sys
 import getopt

@@ -7,7 +7,7 @@ faker.seed(1234)
 
 
 @pytest.fixture
-def user_factory(poll_factory):
+def user_factory(db, poll_factory):
     class UserFactory(factory.django.DjangoModelFactory):
         class Meta:
                 model = 'markers.User'
@@ -20,7 +20,7 @@ def user_factory(poll_factory):
 
 
 @pytest.fixture
-def sample_user():
+def sample_user(user_factory):
     '''
     sample usage:
     > user1 = sample_user()

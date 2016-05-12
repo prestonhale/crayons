@@ -11,7 +11,7 @@ from polls.views import polls, responses, add_response
 from polls.models import Topic, Poll, PollChoice, Response
 
 # Create your tests here.
-
+"""
 class HomePage(TestCase):
 
     def helper_set_up_sample_polls(self):
@@ -132,4 +132,4 @@ class Responses(TestCase):
         self.assertEqual(response.poll_choice.id, first_poll_choice.id)
         self.assertEqual(response.user.id, bob_user.id)
 
-
+"""

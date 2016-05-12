@@ -9,7 +9,7 @@ faker.seed(1234)
 
 
 @pytest.fixture
-def response_factory(user_factory, poll_choice_factory):
+def response_factory(db, user_factory, poll_choice_factory):
     class ResponseFactory(factory.django.DjangoModelFactory):
         class Meta:
                 model = Response
@@ -21,7 +21,7 @@ def response_factory(user_factory, poll_choice_factory):
 
 
 @pytest.fixture
-def sample_response():
+def sample_response(response_factory):
     '''
     sample usage:
     > response1 = sample_response()

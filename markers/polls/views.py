@@ -26,8 +26,8 @@ def save_instance(instance):
 
 
 def polls(request):
-    all_polls=Poll.objects.all()
-    return response_handler({"data": all_polls})
+    all_polls=Poll.objects.all().values()
+    return response_handler({"data": list(all_polls)})
 
 
 def responses(request, poll_id):

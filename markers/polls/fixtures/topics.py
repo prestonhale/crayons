@@ -9,7 +9,7 @@ faker.seed(1234)
 
 
 @pytest.fixture
-def topic_factory():
+def topic_factory(db):
     class TopicFactory(factory.django.DjangoModelFactory):
         class Meta:
                 model = Topic
@@ -20,7 +20,7 @@ def topic_factory():
 
 
 @pytest.fixture
-def sample_topic():
+def sample_topic(topic_factory):
     '''
     sample usage:
     > topic1 = sample_topic()
