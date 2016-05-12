@@ -1,4 +1,4 @@
-"""markers URL Configuration
+"""voters URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.9/topics/http/urls/
@@ -13,13 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.conf.urls import url
 from django.contrib import admin
-import polls.urls
-import voters.urls
+from voters import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include(polls.urls)),
-    url(r'^voters/', include(voters.urls)),
+	url(r'^create/$', views.create_voter),
+	url(r'^validate-phone/$', views.validate_phone)
 ]

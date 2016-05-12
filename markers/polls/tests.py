@@ -25,11 +25,9 @@ class HomePage(TestCase):
 		second_poll.topic=topic
 		second_poll.save()
 
-
 	def test_open_polls_url_returns_polls_view(self):
 		found = resolve('/polls/')
 		self.assertEqual(found.func, polls)
-
 
 	def test_saving_and_retrieving_polls(self):
 		self.helper_set_up_sample_polls()
@@ -40,7 +38,6 @@ class HomePage(TestCase):
 
 		self.assertEqual(first_saved_item.name, "New State Bird")
 		self.assertEqual(second_saved_item.name, "Death Penalty for Badgers?")
-
 
 	def test_polls_view_returns_all_polls(self):
 		self.helper_set_up_sample_polls()
@@ -75,7 +72,6 @@ class Responses(TestCase):
 		first_response=all_responses[0]
 		self.assertEqual(first_response.poll_choice.poll.name, 'New State Bird')
 
-
 	def test_responses_view_returned_by_correct_url(self):
 		topic=Topic.objects.create()
 		poll=Poll.objects.create(name='New State Bird', topic=topic)
@@ -83,7 +79,6 @@ class Responses(TestCase):
 
 		found=resolve('/polls/{0}/'.format(poll.id))
 		self.assertEqual(found.func, responses)
-
 
 	def test_responses_view_returns_all_possible_responses(self):
 		bob_user=User.objects.create_user('bob', password='orcpass')
