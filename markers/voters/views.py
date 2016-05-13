@@ -1,10 +1,10 @@
-
+  
 from voters import phone_validation
-from voters.models import Voter
-from voters.serializers import VoterSerializer
-from voters.permissions import IsUser
+from voters.models import Voter, CellCarrier
+from voters.serializers import VoterSerializer, CellCarrierSerializer
+from markers.generic_permissions import IsOwningUserOrSuperUser
 from datetime import datetime
-from rest_framework import generics, mixins, status, permissions
+from rest_framework import generics, mixins, status, permissions, viewsets
 from rest_framework.response import Response
 
 # Create your views here.
@@ -37,7 +37,16 @@ class VoterDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Voter.objects.all()
 	serializer_class = VoterSerializer
 	permission_classes = (permissions.IsAuthenticated,
-						IsUser,)
+						IsOwningUserOrSuperUser,)
+
+
+class CellCarrierViewSet(viewsets.ReadOnlyModelViewSet):
+	"""
+	This viewset automaticall provides 'list' and 'detail' actions.
+	"""
+	queryset = CellCarrier.objects.all()
+	serializer_class =  CellCarrierSerializer
+	permission_classes = (permissions.IsAuthenticated,)
 
 
 def validate_phone(request):

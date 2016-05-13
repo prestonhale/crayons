@@ -122,3 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Settings for django rest framework
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 10
+}

@@ -17,8 +17,22 @@ from django.conf.urls import url
 from django.contrib import admin
 from voters import views
 
+carrier_list = views.CellCarrierViewSet.as_view({
+    'get': 'list'
+})
+carrier_detail = views.CellCarrierViewSet.as_view({
+    'get': 'retrieve'
+})
+
 urlpatterns = [
-	url(r'^$', views.VoterList.as_view()),
-	url(r'^(?P<pk>[0-9]+)/$', views.VoterDetail.as_view()),
-	url(r'^validate-phone/$', views.validate_phone)
+	url(r'^$',
+        views.VoterList.as_view(),
+        name='voter-list'),
+	url(r'^(?P<pk>[0-9]+)/$',
+        views.VoterDetail.as_view(),
+        name='voter-detail'),
+	url(r'^validate-phone/$',
+        views.validate_phone),
+    url(r'^carriers/$', carrier_list, name='carrier-list'),
+    url(r'^carriers/(?P<pk>[0-9]+)/$', carrier_detail, name='carrier-detail')
 ]
