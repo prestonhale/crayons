@@ -17,6 +17,6 @@ class PollChoice(models.Model):
 	text=models.TextField()
 
 
-class Response(models.Model):
+class PollResponse(models.Model):
 	poll_choice=models.ForeignKey(PollChoice)
-	user=models.ForeignKey(User)
+	user=models.ForeignKey(User, related_name='PollResponse')

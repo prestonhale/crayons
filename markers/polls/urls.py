@@ -15,10 +15,25 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from rest_framework.urlpatterns import format_suffix_patterns
 from polls import views
 
 urlpatterns = [
-	url(r'^$', views.polls, name='polls'),
-	url(r'^([0-9]+)/$', views.responses, name='responses'),
-	url(r'^([0-9]+)/add/$', views.add_response, name='add_response'),
+	url(r'^$',
+		views.PollList.as_view(),
+		name='poll-list'),
+    url(r'^(?P<pk>[0-9]+)/$',
+    	views.PollDetail.as_view(),
+    	name='poll-detail'),
+    url(r'^choices/$',
+    	views.PollChoiceList.as_view(),
+    	name='poll-choice'),
+    url(r'^responses/$',
+    	views.PollResponseList.as_view(),
+    	name='response-list'),
+    url(r'^responses/(?P<pk>[0-9]+)/$',
+    	views.PollResponseDetail.as_view(),
+    	name='response-detail'),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

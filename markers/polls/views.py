@@ -1,21 +1,34 @@
-import json
-from django.shortcuts import render
-from django.core import serializers
-from django.http import HttpResponse, JsonResponse
-from polls.models import Poll, PollChoice, Response
+from rest_framework import generics, permissions
+from polls.models import Poll, PollResponse, PollChoice
+from polls.serializers import PollSerializer, PollResponseSerializer, PollChoiceSerializer
+from markers.generic_permissions import IsOwningUserOrSuperUser
 
-def polls(request):
-	all_polls=Poll.objects.all()
-	json_all_polls=serializers.serialize('json', all_polls)
-	return HttpResponse(json_all_polls)
 
-def responses(request, poll_id):
-	poll_responses=Response.objects.filter(poll_choice__poll_id=poll_id)
-	json_poll_responses=serializers.serialize('json', poll_responses)
-	return HttpResponse(json_poll_responses)
+class PollList(generics.ListCreateAPIView):
+	queryset=Poll.objects.all()
+	serializer_class=PollSerializer
+	permission_classes = (permissions.IsAuthenticated,)
 
-def add_response(request, poll_id):
-	poll_choice_id=request.POST['poll_choice_id']
-	poll_choice=PollChoice.objects.get(id=poll_choice_id)
-	Response.objects.create(poll_choice=poll_choice, user=request.user)
-	return HttpResponse(status=200)
+
+class PollDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = Poll.objects.all()
+	serializer_class = PollSerializer
+	permission_classes = (permissions.IsAuthenticated,)
+
+
+class PollChoiceList(generics.ListCreateAPIView):
+	queryset = PollChoice.objects.all()
+	serializer_class = PollChoiceSerializer
+	permission_classes = (permissions.IsAuthenticated,)
+
+
+class PollResponseList(generics.ListCreateAPIView):
+	queryset = PollResponse.objects.all()
+	serializer_class = PollResponseSerializer
+	permission_classes = (permissions.IsAdminUser,)
+
+
+class PollResponseDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = PollResponse.objects.all()
+	serializer_class = PollResponseSerializer
+	permission_classes = (IsOwningUserOrSuperUser,)
