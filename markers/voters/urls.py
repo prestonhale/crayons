@@ -19,5 +19,6 @@ from voters import views
 
 urlpatterns = [
 	url(r'^$', views.VoterList.as_view()),
+	url(r'^(?P<pk>[0-9]+)/$', views.VoterDetail.as_view()),
 	url(r'^validate-phone/$', views.validate_phone)
 ]

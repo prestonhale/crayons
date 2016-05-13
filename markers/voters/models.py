@@ -19,7 +19,7 @@ class Voter(models.Model):
 				 """
 		)
 
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, related_name='voter')
 	phone = models.CharField(max_length=255, validators=[phone_regex])
 	phone_key = models.IntegerField(blank=True, default=00000)
 	phone_key_generated_at = models.DateTimeField(blank=True, auto_now_add=True)

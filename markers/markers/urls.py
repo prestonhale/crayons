@@ -23,3 +23,9 @@ urlpatterns = [
     url(r'^polls/', include(polls.urls)),
     url(r'^voters/', include(voters.urls)),
 ]
+
+# Login authentication for the api reference
+urlpatterns += [
+    url(r'^api-auth/', include('rest_framework.urls',
+                               namespace='rest_framework')),
+    ]

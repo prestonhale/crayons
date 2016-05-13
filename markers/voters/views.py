@@ -2,8 +2,9 @@
 from voters import phone_validation
 from voters.models import Voter
 from voters.serializers import VoterSerializer
+from voters.permissions import IsUser
 from datetime import datetime
-from rest_framework import generics, mixins, status
+from rest_framework import generics, mixins, status, permissions
 from rest_framework.response import Response
 
 # Create your views here.
@@ -11,6 +12,7 @@ class VoterList(mixins.ListModelMixin,
 			    generics.GenericAPIView):
 	queryset = Voter.objects.all()
 	serializer_class = VoterSerializer
+	permission_classes = (permissions.IsAdminUser,)
 
 	def get(self,request, *args, **kwargs):
 		return self.list(request, *args, **kwargs)
@@ -29,6 +31,14 @@ class VoterList(mixins.ListModelMixin,
 				)
 			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VoterDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = Voter.objects.all()
+	serializer_class = VoterSerializer
+	permission_classes = (permissions.IsAuthenticated,
+						IsUser,)
+
 
 def validate_phone(request):
 	user=User.objects.get(id=request.POST['user_id'])
