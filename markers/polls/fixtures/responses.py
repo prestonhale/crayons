@@ -35,3 +35,4 @@ def sample_response(response_factory):
         return response_factory(**defaults)
 
     return factory_worker
+

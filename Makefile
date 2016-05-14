@@ -22,8 +22,8 @@ checkversions:
 	@python --version | grep -q 3.5. || { echo "Need Python 3.5" && exit 1; }
 
 tests:
-	cd markers && echo "UNIT TESTS" && $(PYTEST_BIN) --dc=$(DJANGO_CONFIGURATION) -m "not integration and not endtoend" --ignore=env
-	cd markers && echo "INTEGRATION TESTS" && $(PYTEST_BIN) --dc=$(DJANGO_CONFIGURATION) -m "integration"
+	cd markers && echo "UNIT TESTS" && $(PYTEST_BIN)  -m "not integration and not endtoend" --ignore=env
+	cd markers && echo "INTEGRATION TESTS" && $(PYTEST_BIN)  -m "integration"
 
 endtoendtests:
 	@echo "END TO END TESTS" && $(PYTEST_BIN) -m "endtoend"

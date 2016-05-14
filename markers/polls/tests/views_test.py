@@ -1,87 +1,66 @@
-import json
-
 import pytest
 from django.core.urlresolvers import resolve, reverse
-from django.contrib.auth.models import User
-from django.test import TestCase
+from django.core import serializers
 
 from polls.views import polls, responses, add_response
-from polls.models import Topic, Poll, PollChoice, Response
+from polls.models import Response
 
-# Create your tests here.
 
-def test_open_polls_url_returns_polls_view():
-    found = resolve('/polls/')
-    assert found.func == polls
+def assert_view_returned(url, view, **url_kwargs):
 
+    def test_handler():
+        if len(url_kwargs):
+            print (url_kwargs)
+            found = resolve(url.format(**url_kwargs))
+        else:
+            found = resolve(url)
+
+        assert found.func == view
+
+    test_handler()
+
+
+test_polls_url = lambda: assert_view_returned('/polls/', polls)
+test_responses_url = lambda sample_poll: assert_view_returned('/polls/{poll}/', responses,
+        poll=sample_poll().id)
+test_add_response_url = lambda sample_poll: assert_view_returned('/polls/{poll}/add/', add_response,
+        poll=sample_poll().id)
+
+
+@pytest.mark.integration
 def test_poll_endpoint(client, sample_poll):
     poll1 = sample_poll()
     poll2 = sample_poll()
     path = reverse('polls')
     response = client.get(path)
-    data = response.json()["data"]
-    assert len(data) == 2
+    deserialized_objs = list(serializers.deserialize('json', response.content))
+    assert len(deserialized_objs) == 2
 
 
-"""
-class Responses(TestCase):
+@pytest.mark.integration
+def test_responses_view_returns_all_possible_responses(client, sample_full_poll_data_with_responses):
+    poll = sample_full_poll_data_with_responses
+    path = reverse('responses', args=(poll.id,))
+    response = client.get(path)
+    deserialized_objs = list(serializers.deserialize('json', response.content))
+    assert deserialized_objs[0].object.user.username == 'bob'
+    assert deserialized_objs[1].object.poll_choice.poll.name == 'New State Bird'
 
-    def test_responses_view_returned_by_correct_url(self):
-        topic=Topic.objects.create()
-        poll=Poll.objects.create(name='New State Bird', topic=topic)
-        first_poll_choice=PollChoice.objects.create(text='Pidgey', poll=poll)
 
-        found=resolve('/polls/{0}/'.format(poll.id))
-        self.assertEqual(found.func, responses)
+@pytest.mark.integration
+def test_can_add_response_via_url(client, sample_user, sample_full_poll_data_no_responses):
+    bob = sample_user(username="bob", password="orcpass")
+    poll = sample_full_poll_data_no_responses
+    first_poll_choice = poll.pollchoice_set.first()
 
-    def test_responses_view_returns_all_possible_responses(self):
-        bob_user=User.objects.create_user('bob', password='orcpass')
-        bob_user.save()
-
-        tom_user=User.objects.create_user('tom', password='tompass')
-        tom_user.save()
-
-        topic=Topic.objects.create()
-        poll=Poll.objects.create(name='New State Bird', topic=topic)
-
-        first_poll_choice=PollChoice.objects.create(text='Pidgey', poll=poll)
-        second_poll_choice=PollChoice.objects.create(text='A Porcupine', poll=poll)
-
-        first_response=Response.objects.create(poll_choice=first_poll_choice, user=bob_user)
-        second_response=Response.objects.create(poll_choice=second_poll_choice, user=tom_user)
-
-        request=HttpRequest()
-        response=responses(request, poll.id).content
-
-        deserialized_objs = list(serializers.deserialize('json', response))
-        self.assertEqual(deserialized_objs[0].object.user.username, 'bob')
-        self.assertEqual(deserialized_objs[1].object.poll_choice.poll.name, 'New State Bird')
-
-    def test_add_response_url_returns_correct_view(self):
-        topic=Topic.objects.create()
-        poll=Poll.objects.create(name='New State Bird', topic=topic)
-
-        found = resolve('/polls/{0}/add/'.format(poll.id))
-        self.assertEqual(found.func, add_response)
-
-    def test_can_add_response_via_url(self):
-        bob_user=User.objects.create_user('bob', password='orcpass')
-        bob_user.save()
-
-        topic=Topic.objects.create()
-        poll=Poll.objects.create(name='New State Bird', topic=topic)
-
-        first_poll_choice=PollChoice.objects.create(text='Pidgey', poll=poll)
-        second_poll_choice=PollChoice.objects.create(text='A Porcupine', poll=poll)
-
-        self.client.login(username='bob', password='orcpass')
-        self.client.post(
-                '/polls/{0}/add/'.format(poll.id),
-                 data={'poll_choice_id': first_poll_choice.id}
-                 )
-        self.assertEqual(Response.objects.count(), 1)
-        response=Response.objects.first()
-        self.assertEqual(response.poll_choice.id, first_poll_choice.id)
-        self.assertEqual(response.user.id, bob_user.id)
-"""
+    client.login(username='bob', password='orcpass')
+    path = reverse('add_response', args=(poll.id,))
+    data={'poll_choice_id': first_poll_choice.id}
+    client.post(path, data )
+    
+    responses = Response.objects.all()
+    assert responses.count() == 1
+    response = responses.first()
+    assert response.poll_choice.id == first_poll_choice.id
+    assert response.user.id == bob.id
 

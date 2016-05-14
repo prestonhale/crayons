@@ -12,16 +12,17 @@ framework itself, but I think we should keep them for now to increase test cover
 
 def assert_created(model, *fixtures):
 
-    def the_test(*fixtures):
+    def test_handler(*fixtures):
         instance = fixtures[0]()
         assert model.objects.all()[0] == instance
 
-    the_test(*fixtures)
+    test_handler(*fixtures)
 
 '''
 Since pytest looks for functions that start with test_, we can also define tests with 
 lambda functions, making these super repetitive tests DRY and more concise. Super cool!
 '''
+
 test_create_user = lambda sample_user : assert_created(User, sample_user)
 test_create_topic = lambda sample_topic : assert_created(Topic, sample_topic)
 test_create_poll = lambda sample_poll : assert_created(Poll, sample_poll)
