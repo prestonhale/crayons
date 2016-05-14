@@ -74,3 +74,4 @@ def test_can_add_response_via_url(client, sample_user, sample_full_poll_data_no_
     assert response.poll_choice.id == first_poll_choice.id
     assert response.user.id == bob.id
 '''
+

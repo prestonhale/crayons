@@ -28,3 +28,4 @@ test_create_topic = lambda sample_topic : assert_created(Topic, sample_topic)
 test_create_poll = lambda sample_poll : assert_created(Poll, sample_poll)
 test_create_pollchoice = lambda sample_poll_choice : assert_created(PollChoice, sample_poll_choice)
 test_create_response = lambda sample_response : assert_created(PollResponse, sample_response)
+
