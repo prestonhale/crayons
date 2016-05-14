@@ -22,8 +22,8 @@ checkversions:
 	@python --version | grep -q 3.5. || { echo "Need Python 3.5" && exit 1; }
 
 tests:
-	@echo "UNIT TESTS" && $(PYTEST_BIN) -m "not integration and not endtoend"
-	@echo "SMOKE TESTS" && $(PYTEST_BIN) -m "integration"
+	cd markers && echo "UNIT TESTS" && $(PYTEST_BIN) --dc=$(DJANGO_CONFIGURATION) -m "not integration and not endtoend" --ignore=env
+	cd markers && echo "INTEGRATION TESTS" && $(PYTEST_BIN) --dc=$(DJANGO_CONFIGURATION) -m "integration"
 
 endtoendtests:
 	@echo "END TO END TESTS" && $(PYTEST_BIN) -m "endtoend"
@@ -32,10 +32,10 @@ coveragereport:
 	$(PYTEST_BIN) --cov
 
 runserver:
-	cd markers && gunicorn -b "0.0.0.0:$(PORT)" --error-logfile - markers.wsgi
+	cd markers && gunicorn -b "0.0.0.0:$(BACKEND_PORT)" --error-logfile - markers.wsgi
 
 devserver:
-	cd markers && python manage.py runserver $(PORT)
+	cd markers && python manage.py runserver $(BACKEND_PORT)
 
 clean:
 	find . -type f -name '*.py[co]' -delete

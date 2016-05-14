@@ -3,6 +3,7 @@ import factory
 from faker import Factory as FakerFactory
 
 from polls.models import Response
+from utils.helpers import extend
 
 faker = FakerFactory.create()
 faker.seed(1234)
@@ -29,4 +30,8 @@ def sample_response(response_factory):
     > Response.objects.all().count() # returns 2
     '''
 
-    return response_factory()()
+    def factory_worker(**custom_fields):
+        defaults = extend({}, custom_fields)
+        return response_factory(**defaults)
+
+    return factory_worker

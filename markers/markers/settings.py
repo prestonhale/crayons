@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
-from configurations import Configuration
 import os
+from configurations import Configuration
 
 class Base(Configuration):
     # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

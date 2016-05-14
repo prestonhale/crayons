@@ -3,6 +3,7 @@ import factory
 from faker import Factory as FakerFactory
 
 from polls.models import PollChoice
+from utils.helpers import extend
 
 faker = FakerFactory.create()
 faker.seed(1234)
@@ -28,6 +29,12 @@ def sample_poll_choice(poll_choice_factory):
     > poll_choice2 = sample_poll_choice()
     > PollChoice.objects.all().count() # returns 2
     '''
+    def factory_worker(**custom_fields):
+        defaults = {
+            "text": factory.LazyAttribute(lambda x: faker.sentence(nb_words=200)),
+        }
+        defaults = extend(defaults, custom_fields)
+        return poll_choice_factory(**defaults)
 
-    text = factory.LazyAttribute(lambda x: faker.sentence(nb_words=200))
-    return poll_choice_factory()(text=text)
+    return factory_worker
+
