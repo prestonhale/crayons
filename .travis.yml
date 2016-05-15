@@ -1,0 +1,9 @@
+language: python
+python:
+- '3.5'
+cache: pip
+script: make tests
+deploy:
+  provider: heroku
+  app:
+    master: crayons

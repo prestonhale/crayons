@@ -1,0 +1,7 @@
+---
+languages:
+    Python: true
+exclude_paths:
+- "**/*_test.py"
+- "**/fixtures/**/*"
+- "**/migrations/**/*"
